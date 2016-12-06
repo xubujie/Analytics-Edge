@@ -1,0 +1,35 @@
+letters = read.csv("letters_ABPR.csv")
+letters$isB = as.factor(letters$letter == "B")
+
+library(caTools)
+set.seed(1000)
+split = sample.split(letters$isB, SplitRatio = 0.5)
+train = subset(letters, split == TRUE)
+test = subset(letters, split == FALSE)
+table(test$isB)
+
+# Tree
+library(rpart)
+library(rpart.plot)
+CARTb = rpart(isB ~ .-letter, data = train, method = "class")
+predictB = predict(CARTb, newdata = test, type = "class")
+table(test$isB, predictB)
+
+# Random Forest
+library(randomForest)
+randomForestB = randomForest(isB ~ .-letter, data = train)
+randomForest.predictB = predict(randomForestB, newdata = test, type = "class")
+table(test$isB, randomForest.predictB)
+
+letters$letter = as.factor(letters$letter)
+set.seed(2000)
+split = sample.split(letters$letter, SplitRatio = 0.5)
+train = subset(letters, split == TRUE)
+test = subset(letters, split == FALSE)
+table(test$letter)
+CART = rpart(letter ~ . - isB, data = train, method = "class")
+CART.pred = predict(CART, newdata = test, type = "class")
+table(test$letter, CART.pred)
+RF = randomForest(letter ~ . - isB, data = train)
+RF.pred = predict(RF, newdata = test, type = "class")
+table(test$letter, RF.pred)
