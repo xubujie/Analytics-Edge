@@ -1,5 +1,5 @@
-setwd("Desktop/Analytics Edge/Unit 1/")
-mtv <- read.csv("mvtWeek1.csv")
+library(dplyr)
+mtv <- read.csv("data/mvtWeek1.csv")
 str(mtv)
 summary(mtv)
 head(mtv)
